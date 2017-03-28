@@ -5,6 +5,7 @@ namespace ConsoleApplication
 {
     public class FileSearcher
     {
+        internal string CurrentDirectory{ get; set; }
         public event EventHandler<FileFoundArgs> FileFound;
         internal event EventHandler<SearchDirectoryArgs> DirectoryChanged
             {
@@ -14,7 +15,6 @@ namespace ConsoleApplication
         private EventHandler<SearchDirectoryArgs> directoryChanged;
         public void SearchDirectories(string directory, string searchPattern, bool searchSubDirs = true)
         {
-            
             if (searchSubDirs)
             {
                 var allDirectories = Directory.GetDirectories(directory, "*.*", SearchOption.AllDirectories);
@@ -22,13 +22,7 @@ namespace ConsoleApplication
                 var totalDirs = allDirectories.Length + 1;
                 foreach (var dir in allDirectories)
                 {
-                    var lastIndexOf = directory.LastIndexOf("/");
-                    System.Console.WriteLine($"directory: {directory}");
-                    System.IO.DirectoryInfo directoryInfo = System.IO.Directory.GetParent(dir);
-                    System.Console.WriteLine($"directoryInfo: {directoryInfo}");
-                    string directoryInfoString = directoryInfo.ToString();
-                    string directoryInfoSubstring = directoryInfoString.Substring(lastIndexOf);
-                    System.Console.WriteLine($"directoryInfoSubstring: {directoryInfoSubstring}");
+                    //DirectoryInfo(directory,dir);
                     int numOfSlashes = numOfSlashesInPath(directory, dir);
                     System.Console.WriteLine($"Total numOfSlashes: {numOfSlashes}");
                     directoryChanged?.Invoke(this,
@@ -51,7 +45,9 @@ namespace ConsoleApplication
         {
             foreach (var file in Directory.EnumerateFiles(directory, searchPattern))
             {
-                var args = new FileFoundArgs(file);
+                //DirectoryInfo(CurrentDirectory,file);
+                int numOfSlashes = numOfSlashesInPath(CurrentDirectory, file);
+                var args = new FileFoundArgs(file, numOfSlashes);
                 FileFound?.Invoke(this, args);
                 //if (args.CancelRequested)
                   //  break;
@@ -76,10 +72,19 @@ namespace ConsoleApplication
                         break;
                     }
                     ++numOfSlashes;
-                    //totalNumOfSlashes+=numOfSlashes;
                 }
             }
             return numOfSlashes;
+        }
+        internal void DirectoryInfo(string directory,string dir)
+        {
+            var lastIndexOf = directory.LastIndexOf("/");
+            System.Console.WriteLine($"directory: {directory}");
+            System.IO.DirectoryInfo directoryInfo = System.IO.Directory.GetParent(dir);
+            System.Console.WriteLine($"directoryInfo: {directoryInfo}");
+            string directoryInfoString = directoryInfo.ToString();
+            string directoryInfoSubstring = directoryInfoString.Substring(lastIndexOf);
+            System.Console.WriteLine($"directoryInfoSubstring: {directoryInfoSubstring}");
         }
         /*     
         public void SearchCurrentDirectory(string currentDirectory)

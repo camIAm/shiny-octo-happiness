@@ -13,6 +13,7 @@ namespace ConsoleApplication
             //System.Console.WriteLine($"rootDirectory: {rootDirectory} \n");
             FileSearcher fileSearcher = new FileSearcher();
             new FileLister(fileSearcher); 
+            fileSearcher.CurrentDirectory = currentDirectory;
             fileSearcher.SearchDirectories(currentDirectory,"*.*");
             //fileSearcher.SearchDirectory(currentDirectory,"*.*");
         }
