@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using CSharpTree;
 
 namespace ConsoleApplication
 {
@@ -60,7 +61,14 @@ namespace ConsoleApplication
                     System.Console.WriteLine("charArray does not include of of file");// use comparer to determine which variable doesnt include which
                 }
                 Queue<int> queueSlashPlacement = BuildDirectoryTreeViaQueue(charArray);
-                GetCharArrayBySlicesQueue(charArray, queueSlashPlacement);
+                Queue<string> pathQueue = GetCharArrayBySlicesQueue(charArray, queueSlashPlacement);
+                PathComposition pathComposition = new PathComposition(pathQueue);
+                TreeNode<string> treeRoot = pathComposition.PathBuilder();
+                foreach (TreeNode<string> node in treeRoot)
+                {
+                 //   string indent = CreateIndent(node.Level);
+                    Console.WriteLine((node.Data ?? "null"));
+                }
                 while(queueSlashPlacement.Count>0)
                 {
                     int stackIndex = queueSlashPlacement.Dequeue();
@@ -73,24 +81,13 @@ namespace ConsoleApplication
                   //  break;
             }
         }
-        internal void GetCharArrayBySlices(char[] charArray, Stack<int> stackPlacement)
-        {
-            int pop = 0;
-            string wasCharArray = charArray.ToString();
-            for(int i = pop; i<stackPlacement.Count; i++)
-            {
-                pop = stackPlacement.Pop();
-                if(pop != 0){
-                string folderOrFile = wasCharArray.Substring(i, pop);
-                i = pop;
-                }
-            }
-        }
-        internal void GetCharArrayBySlicesQueue(char[] charArray, Queue<int> slashPlacement)
+        internal Queue<string> GetCharArrayBySlicesQueue(char[] charArray, Queue<int> slashPlacement)
         {
             int start = 0;
             int capacity = slashPlacement.Count;
+            Queue<string> pathQueue = new Queue<string>();
             List<string> wordsBetweenSlashes = new List<string>();
+            System.Console.WriteLine(charArray);
             for(int i = 0; i < capacity;i++)
             {
                 string wasCharArray = new String(charArray);
@@ -98,17 +95,19 @@ namespace ConsoleApplication
                 int pop = slashPlacement.Dequeue();
                 if(pop != 0)
                 {
-                    System.Console.WriteLine(wasCharArray);
-                    System.Console.WriteLine(wasCharArray.Substring(start + 1, pop -start -1));
-                wordsBetweenSlashes.Add(wasCharArray.Substring(start + 1, pop - start - 1));
-                start = pop;
+                    System.Console.WriteLine(wasCharArray.Substring(start + 1, pop - start -1));
+                    wordsBetweenSlashes.Add(wasCharArray.Substring(start + 1, pop - start - 1));
+                    pathQueue.Enqueue(wasCharArray.Substring(start + 1, pop - start - 1));
+                    start = pop;
                 }
                 if(slashPlacement.Count==0)
                 {
                     wordsBetweenSlashes.Add(wasCharArray.Substring(start + 1));
                     System.Console.WriteLine(wasCharArray.Substring(start + 1));
+                    pathQueue.Enqueue(wasCharArray.Substring(start + 1));
                 }
             }
+            return pathQueue;
         }
         internal char[] GetDirectoryCharArray(string directory, string dir)
         {
@@ -120,7 +119,6 @@ namespace ConsoleApplication
         internal int NumOfSlashesInPath(char[] directoryInfoSubstringToCharArray)
         {
             int numOfSlashes = 0;
-            //int totalNumOfSlashes = 0;
             for(int i = 0; i < directoryInfoSubstringToCharArray.Length; i++)
             {
                 char current = directoryInfoSubstringToCharArray[i];
@@ -135,6 +133,19 @@ namespace ConsoleApplication
             }
             return numOfSlashes;
         }
+        internal Queue<int> BuildDirectoryTreeViaQueue(char[] directoryInfoSubstringToCharArray)
+        {
+            for(int i = 0; i < directoryInfoSubstringToCharArray.Length; i++)
+            {
+                char current = directoryInfoSubstringToCharArray[i];
+                if(current.Equals('/'))
+                {
+                    if(current.Equals(null)){break;}
+                    SlashPlacementQueue.Enqueue(i);
+                }
+            }
+            return SlashPlacementQueue;
+        }
         internal Stack<int> BuildDirectoryTree(char[] directoryInfoSubstringToCharArray)
         {
             for(int i = 0; i < directoryInfoSubstringToCharArray.Length; i++)
@@ -148,18 +159,18 @@ namespace ConsoleApplication
             }
             return SlashPlacementStack;
         }
-        internal Queue<int> BuildDirectoryTreeViaQueue(char[] directoryInfoSubstringToCharArray)
+        internal void GetCharArrayBySlices(char[] charArray, Stack<int> stackPlacement)
         {
-            for(int i = 0; i < directoryInfoSubstringToCharArray.Length; i++)
+            int pop = 0;
+            string wasCharArray = charArray.ToString();
+            for(int i = pop; i<stackPlacement.Count; i++)
             {
-                char current = directoryInfoSubstringToCharArray[i];
-                if(current.Equals('/'))
-                {
-                    if(current.Equals(null)){break;}
-                    SlashPlacementQueue.Enqueue(i);
+                pop = stackPlacement.Pop();
+                if(pop != 0){
+                string folderOrFile = wasCharArray.Substring(i, pop);
+                i = pop;
                 }
             }
-            return SlashPlacementQueue;
         }
         internal void DirectoryInfo(string directory,string dir)
         {
