@@ -66,8 +66,7 @@ namespace ConsoleApplication
                 TreeNode<string> treeRoot = pathComposition.PathBuilder();
                 foreach (TreeNode<string> node in treeRoot)
                 {
-                 //   string indent = CreateIndent(node.Level);
-                    Console.WriteLine((node.Data ?? "null"));
+                    Console.WriteLine((node.Data ?? "null")); // Testing purposes
                 }
                 while(queueSlashPlacement.Count>0)
                 {
