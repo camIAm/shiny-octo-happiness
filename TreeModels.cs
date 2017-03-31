@@ -155,7 +155,7 @@ namespace ConsoleApplication
             return root;
         }
     }
-        public class SeventhChildNode: ITreeImpl
+    public class SeventhChildNode: ITreeImpl
     {
         public TreeNode<string> GetTreeImple(Queue<string> pathQueue)
         {

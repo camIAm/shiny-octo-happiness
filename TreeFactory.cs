@@ -1,18 +1,18 @@
-using System.Collections.Generic;
-using CSharpTree;
 
 namespace ConsoleApplication
 {
     public class TreeFactory
     {
         ITreeImpl returnTreeKind;
+        public TreeFactory()
+        {
+        }
+        /* 
         public TreeFactory(ITreeImpl _returnTreeKind)
         {
             returnTreeKind = _returnTreeKind;
         }
-        public TreeFactory()
-        {
-        }
+        */
         public ITreeImpl GetTreeKind(int pathCount)
         {
             switch(pathCount)

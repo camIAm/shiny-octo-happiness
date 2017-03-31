@@ -13,7 +13,7 @@ namespace ConsoleApplication
         }
         EventHandler<FileFoundArgs> onFileFound = (sender, eventArgs) =>
         {
-            Console.WriteLine(Indent(eventArgs.SlashesFromDirectoryRoot) + $"{eventArgs.File}");
+            Console.WriteLine($"{eventArgs.File}");
            // eventArgs.CancelRequested = true;
         };
         EventHandler<SearchDirectoryArgs> onDirectoryChanged = (sender, eventArgs) =>
