@@ -36,9 +36,6 @@ namespace ConsoleApplication
 
             if(originalPathCount == 1)
             {
-                valueFromQueue = PathQueue.Dequeue();
-                
-                root = new TreeNode<string>(valueFromQueue);
                 return root;
             }
             
@@ -54,7 +51,8 @@ namespace ConsoleApplication
                 TreeNode<string> node0 = root.AddChild(secondValueFromQueue);
                 {                            
                     string thirdValueFromQueue = PathQueue.Dequeue();
-                    TreeNode<string> node1 = root.AddChild(thirdValueFromQueue);
+                    TreeNode<string> node1 = node0.AddChild(thirdValueFromQueue);// dont need to create last object in all these case
+                                                                                // i.e. node1 in this case, TODO: Remove
                 }                        
                 return root;
             }
@@ -67,7 +65,7 @@ namespace ConsoleApplication
                     TreeNode<string> node1 = root.AddChild(thirdValueFromQueue);
                     {
                         string fourthValueFromQueue = PathQueue.Dequeue();
-                        TreeNode<string> node2 = root.AddChild(fourthValueFromQueue);   
+                        TreeNode<string> node2 = node1.AddChild(fourthValueFromQueue);   
                     }
                 }                        
                 return root;
@@ -78,13 +76,13 @@ namespace ConsoleApplication
                 TreeNode<string> node0 = root.AddChild(secondValueFromQueue);
                 {
                     string thirdValueFromQueue = PathQueue.Dequeue();
-                    TreeNode<string> node1 = root.AddChild(thirdValueFromQueue);
+                    TreeNode<string> node1 = node0.AddChild(thirdValueFromQueue);
                         {
                             string fourthValueFromQueue = PathQueue.Dequeue();
-                            TreeNode<string> node2 = root.AddChild(fourthValueFromQueue);   
+                            TreeNode<string> node2 = node1.AddChild(fourthValueFromQueue);   
                             {
                                 string fifthValueFromQueue = PathQueue.Dequeue();
-                                TreeNode<string> node3 = root.AddChild(fifthValueFromQueue);   
+                                TreeNode<string> node3 = node2.AddChild(fifthValueFromQueue);   
                             }
                         }
                     }                            

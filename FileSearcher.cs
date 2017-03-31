@@ -57,14 +57,19 @@ namespace ConsoleApplication
             {
                 char[] charArray = GetDirectoryCharArray(CurrentDirectory, file);
                 var fileToArrayComparison = file.Substring(CurrentDirectory.LastIndexOf('/'));
-                if(charArray.Length != fileToArrayComparison.Length){
+                if(charArray.Length != fileToArrayComparison.Length)
+                {
                     System.Console.WriteLine("charArray does not include of of file");// use comparer to determine which variable doesnt include which
                 }
                 Queue<int> queueSlashPlacement = BuildDirectoryTreeViaQueue(charArray);
                 Queue<string> pathQueue = GetCharArrayBySlicesQueue(charArray, queueSlashPlacement);
-                PathComposition pathComposition = new PathComposition(pathQueue);
-                TreeNode<string> treeRoot = pathComposition.PathBuilder();
-                foreach (TreeNode<string> node in treeRoot)
+
+                TreeFactory treeFactory = new TreeFactory(); // Factory
+                int pathQueueCount = pathQueue.Count;
+                ITreeImpl treeModel = treeFactory.GetTreeKind(pathQueueCount);
+                TreeNode<string> treeNode = treeModel.GetTreeImple(pathQueue);
+                              
+                foreach (TreeNode<string> node in treeNode)
                 {
                     Console.WriteLine((node.Data ?? "null")); // Testing purposes
                 }
@@ -85,7 +90,7 @@ namespace ConsoleApplication
             int start = 0;
             int capacity = slashPlacement.Count;
             Queue<string> pathQueue = new Queue<string>();
-            List<string> wordsBetweenSlashes = new List<string>();
+            List<string> wordsBetweenSlashes = new List<string>(); // remove
             System.Console.WriteLine(charArray);
             for(int i = 0; i < capacity;i++)
             {
@@ -145,70 +150,5 @@ namespace ConsoleApplication
             }
             return SlashPlacementQueue;
         }
-        internal Stack<int> BuildDirectoryTree(char[] directoryInfoSubstringToCharArray)
-        {
-            for(int i = 0; i < directoryInfoSubstringToCharArray.Length; i++)
-            {
-                char current = directoryInfoSubstringToCharArray[i];
-                if(current.Equals('/'))
-                {
-                    if(current.Equals(null)){break;}
-                    SlashPlacementStack.Push(i);
-                }
-            }
-            return SlashPlacementStack;
-        }
-        internal void GetCharArrayBySlices(char[] charArray, Stack<int> stackPlacement)
-        {
-            int pop = 0;
-            string wasCharArray = charArray.ToString();
-            for(int i = pop; i<stackPlacement.Count; i++)
-            {
-                pop = stackPlacement.Pop();
-                if(pop != 0){
-                string folderOrFile = wasCharArray.Substring(i, pop);
-                i = pop;
-                }
-            }
-        }
-        internal void DirectoryInfo(string directory,string dir)
-        {
-            var lastIndexOf = directory.LastIndexOf("/");
-            System.Console.WriteLine($"directory: {directory}");
-            System.IO.DirectoryInfo directoryInfo = System.IO.Directory.GetParent(dir);
-            System.Console.WriteLine($"directoryInfo: {directoryInfo}");
-            string directoryInfoString = directoryInfo.ToString();
-            string directoryInfoSubstring = directoryInfoString.Substring(lastIndexOf);
-            System.Console.WriteLine($"directoryInfoSubstring: {directoryInfoSubstring}");
-        }
-        /*     
-        public void SearchCurrentDirectory(string currentDirectory)
-        {
-            IEnumerable<String> enumerableDict = Directory.EnumerateDirectories(currentDirectory);
-            foreach(var dict in enumerableDict)
-            {
-                var args = new FileFoundArgs(dict);
-                FileFound?.Invoke(this, args);
-                if(args.CancelRequested)
-                {
-                    break;
-                }
-            }
-        }
-        
-        (public void Search(string directory, string searchPattern)
-            foreach (var file in Directory.EnumerateFiles(directory, searchPattern))
-            {
-                FileFound?.Invoke(this, new FileFoundArgs(file));
-            }
-        }
-        public void Search(string directory)
-        {
-            foreach (var file in Directory.EnumerateFiles(directory))
-            {
-                FileFound?.Invoke(this, new FileFoundArgs(file));
-            }
-        }
-        */
     }
 }

@@ -64,7 +64,7 @@ namespace CSharpTree
 
         private void RegisterChildForSearch(TreeNode<T> node)
         {
-            ElementsIndex.Add(node);
+            ElementsIndex.Add(node);            
             if (Parent != null)
                 Parent.RegisterChildForSearch(node);
         }
