@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using CSharpTree;
 
 namespace ConsoleApplication
 {
     public class PathDecomposition
     {
+        private static int indentation = 2;
         private string _file;
         public string CurrentDirectory { get; set; }
         internal Queue<int> SlashPlacementQueue{ get;set; }
@@ -26,7 +28,8 @@ namespace ConsoleApplication
                 }
                 Queue<int> queueSlashPlacement = BuildDirectoryTreeViaQueue(charArray);
                 Queue<string> pathQueue = GetCharArrayBySlicesQueue(charArray, queueSlashPlacement);
-
+                // Probably shouldn't use lazy initialization for the senario
+                // benchmark regular vs lazy dict
                 var discountsDictionary = new Dictionary<PathEnum, Lazy<ITreeImpl>>
                 {
                     {PathEnum.Root,new Lazy<ITreeImpl>(()=> new RootNode())},
@@ -44,10 +47,31 @@ namespace ConsoleApplication
                 ITreeImpl treeModel = treeFactory.GetTreeKind(pathQueueCount);
                 TreeNode<string> treeNode = treeModel.GetTreeImple(pathQueue);
                               
+                int lengthAfter = 0;
                 foreach (TreeNode<string> node in treeNode)
                 {
-                    Console.WriteLine((node.Data ?? "null")); // Testing purposes
+                    int length;
+                    Console.WriteLine(Indent(node, lengthAfter, out length));
+                    //Console.WriteLine(Indent(node.Level, out length) + (node.Data ?? "null")); // Testing purposes
+                    //System.Console.WriteLine($"Lenght {length}");
+                    lengthAfter = length;
                 }
+        }
+        public static string Indent(TreeNode<string> node,int lengthAfter, out int length)
+        {
+
+            int count = node.Level;
+            StringBuilder sb = new StringBuilder();
+            if(count>0)
+            {
+                int space = (count==1 ? 0 : count-1);
+                sb.Append(' ', space * indentation + (2*space));                
+                sb.Append("|_");
+                sb.Append('_', indentation);
+            }
+            sb.Append(node.Data);
+            length = count;
+            return sb.ToString();
         }
         internal Queue<string> GetCharArrayBySlicesQueue(char[] charArray, Queue<int> slashPlacement)
         {

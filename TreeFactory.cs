@@ -23,41 +23,7 @@ namespace ConsoleApplication
             {
                 throw new NotImplementedException("here is no implementation of IAccountDiscountCalculatorFactory interface for given Account Status");
             }
-
             return treeType.Value;
-            /* 
-            switch(pathEnum)
-            {
-                case PathEnum.Root:
-                    returnTreeKindDict = new RootNode();
-                    break;
-                case PathEnum.One:
-                    returnTreeKindDict = new OneChildNode();
-                    break;
-                case PathEnum.Two:
-                    returnTreeKindDict = new TwoChildNode();
-                    break;
-                case PathEnum.Three:
-                    returnTreeKindDict = new ThreeChildNode();
-                    break;
-                case PathEnum.Four:
-                    returnTreeKindDict = new FourChildNode();
-                    break;
-                case PathEnum.Five:
-                    returnTreeKindDict = new FiveChildNode();
-                    break;
-                case PathEnum.Six:
-                    returnTreeKindDict = new SixChildNode();
-                    break;
-                case PathEnum.Seven:
-                    returnTreeKindDict = new SeventhChildNode();
-                    break;
-                default:
-                    System.Console.WriteLine("path count > or < than pathCount");
-                    break;
-            }
-            return returnTreeKindDict;
-            */
         }
     }
 }

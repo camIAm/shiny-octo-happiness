@@ -5,8 +5,8 @@ namespace ConsoleApplication
 {
     public class FileSearcher
     {
-        public string CurrentDirectory { get; set; }
         public event EventHandler<FileFoundArgs> FileFound;
+        public string CurrentDirectory { get; set; }
         internal event EventHandler<SearchDirectoryArgs> DirectoryChanged
             {
                 add { directoryChanged += value; }
