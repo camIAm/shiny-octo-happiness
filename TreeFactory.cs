@@ -1,52 +1,63 @@
+using System.Collections.Generic;
+using System;
 
 namespace ConsoleApplication
 {
     public class TreeFactory
     {
-        ITreeImpl returnTreeKind;
+        Dictionary<PathEnum, Lazy<ITreeImpl>> returnTreeKindDict;
         public TreeFactory()
         {
         }
-        /* 
-        public TreeFactory(ITreeImpl _returnTreeKind)
+        
+        public TreeFactory(Dictionary<PathEnum, Lazy<ITreeImpl>> _returnTreeKindDict)
         {
-            returnTreeKind = _returnTreeKind;
+            returnTreeKindDict = _returnTreeKindDict;
         }
-        */
+        
         public ITreeImpl GetTreeKind(int pathCount)
         {
+            Lazy<ITreeImpl> treeType;
             PathEnum pathEnum = (PathEnum)pathCount;
+            if(!returnTreeKindDict.TryGetValue(pathEnum, out treeType))
+            {
+                throw new NotImplementedException("here is no implementation of IAccountDiscountCalculatorFactory interface for given Account Status");
+            }
+
+            return treeType.Value;
+            /* 
             switch(pathEnum)
             {
                 case PathEnum.Root:
-                    returnTreeKind = new RootNode();
+                    returnTreeKindDict = new RootNode();
                     break;
                 case PathEnum.One:
-                    returnTreeKind = new OneChildNode();
+                    returnTreeKindDict = new OneChildNode();
                     break;
                 case PathEnum.Two:
-                    returnTreeKind = new TwoChildNode();
+                    returnTreeKindDict = new TwoChildNode();
                     break;
                 case PathEnum.Three:
-                    returnTreeKind = new ThreeChildNode();
+                    returnTreeKindDict = new ThreeChildNode();
                     break;
                 case PathEnum.Four:
-                    returnTreeKind = new FourChildNode();
+                    returnTreeKindDict = new FourChildNode();
                     break;
                 case PathEnum.Five:
-                    returnTreeKind = new FiveChildNode();
+                    returnTreeKindDict = new FiveChildNode();
                     break;
                 case PathEnum.Six:
-                    returnTreeKind = new SixChildNode();
+                    returnTreeKindDict = new SixChildNode();
                     break;
                 case PathEnum.Seven:
-                    returnTreeKind = new SeventhChildNode();
+                    returnTreeKindDict = new SeventhChildNode();
                     break;
                 default:
                     System.Console.WriteLine("path count > or < than pathCount");
                     break;
             }
-            return returnTreeKind;
+            return returnTreeKindDict;
+            */
         }
     }
 }

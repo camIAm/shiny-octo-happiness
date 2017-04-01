@@ -27,7 +27,19 @@ namespace ConsoleApplication
                 Queue<int> queueSlashPlacement = BuildDirectoryTreeViaQueue(charArray);
                 Queue<string> pathQueue = GetCharArrayBySlicesQueue(charArray, queueSlashPlacement);
 
-                TreeFactory treeFactory = new TreeFactory(); // Factory
+                var discountsDictionary = new Dictionary<PathEnum, Lazy<ITreeImpl>>
+                {
+                    {PathEnum.Root,new Lazy<ITreeImpl>(()=> new RootNode())},
+                    {PathEnum.One, new Lazy<ITreeImpl>(()=> new OneChildNode())},
+                    {PathEnum.Two, new Lazy<ITreeImpl>(()=> new TwoChildNode())},
+                    {PathEnum.Three, new Lazy<ITreeImpl>(()=> new ThreeChildNode())},
+                    {PathEnum.Four, new Lazy<ITreeImpl>(()=> new FourChildNode())},
+                    {PathEnum.Five, new Lazy<ITreeImpl>(()=> new FiveChildNode())},
+                    {PathEnum.Six, new Lazy<ITreeImpl>(()=> new SixChildNode())},
+                    {PathEnum.Seven, new Lazy<ITreeImpl>(()=> new SeventhChildNode())},
+                };
+
+                TreeFactory treeFactory = new TreeFactory(discountsDictionary); // Factory
                 int pathQueueCount = pathQueue.Count;
                 ITreeImpl treeModel = treeFactory.GetTreeKind(pathQueueCount);
                 TreeNode<string> treeNode = treeModel.GetTreeImple(pathQueue);
@@ -43,7 +55,7 @@ namespace ConsoleApplication
             int capacity = slashPlacement.Count;
             Queue<string> pathQueue = new Queue<string>();
             System.Console.WriteLine(charArray);
-            
+
             for(int i = 0; i < capacity; i++)
             {
                 string wasCharArray = new String(charArray);
