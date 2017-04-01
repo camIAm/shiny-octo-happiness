@@ -15,30 +15,31 @@ namespace ConsoleApplication
         */
         public ITreeImpl GetTreeKind(int pathCount)
         {
-            switch(pathCount)
+            PathEnum pathEnum = (PathEnum)pathCount;
+            switch(pathEnum)
             {
-                case 0:
+                case PathEnum.Root:
                     returnTreeKind = new RootNode();
                     break;
-                case 1:
+                case PathEnum.One:
                     returnTreeKind = new OneChildNode();
                     break;
-                case 2:
+                case PathEnum.Two:
                     returnTreeKind = new TwoChildNode();
                     break;
-                case 3:
+                case PathEnum.Three:
                     returnTreeKind = new ThreeChildNode();
                     break;
-                case 4:
+                case PathEnum.Four:
                     returnTreeKind = new FourChildNode();
                     break;
-                case 5:
+                case PathEnum.Five:
                     returnTreeKind = new FiveChildNode();
                     break;
-                case 6:
+                case PathEnum.Six:
                     returnTreeKind = new SixChildNode();
                     break;
-                case 7:
+                case PathEnum.Seven:
                     returnTreeKind = new SeventhChildNode();
                     break;
                 default:
